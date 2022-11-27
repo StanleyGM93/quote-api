@@ -16,6 +16,22 @@ app.get("/api/quotes/random", (req, res) => {
 	res.send(getRandomElement(quotes));
 });
 
+app.post("/api/quotes", (req, res) => {
+	const quoteToAdd = req.query.quote;
+	const authorOfQuote = req.query.person;
+	if (quoteToAdd && authorOfQuote) {
+		const quoteObject = {
+			quote: quoteToAdd,
+			person: authorOfQuote,
+		};
+
+		quotes.push(quoteObject);
+		res.status(201).send(quoteObject);
+	} else {
+		res.status(400).send();
+	}
+});
+
 app.listen(PORT, () => {
 	console.log(`Listening on localhost:${PORT}`);
 });
