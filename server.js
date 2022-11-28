@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 4001;
 
 app.use(express.static("public"));
 
-app.get("/api/quotes", (req, res, next) => {
+app.get("/api/quotes", (req, res) => {
 	res.send(quotes);
 });
 
@@ -19,10 +19,12 @@ app.get("/api/quotes/random", (req, res, next) => {
 app.get("/api/quotes?person=author", (req, res, next) => {
 	const personRequested = req.query.person;
 	if (personRequested) {
-		quotes.filter((quote) => quote.person === personRequested);
-		res.send(req.query);
+		const filteredQuotes = quotes.filter(
+			(quote) => quote.person === personRequested
+		);
+		res.send(filteredQuotes);
 	} else {
-		res.send([]);
+		res.send(quotes);
 	}
 });
 
@@ -34,7 +36,6 @@ app.post("/api/quotes", (req, res, next) => {
 			quote: quoteToAdd,
 			person: authorOfQuote,
 		};
-
 		quotes.push(quoteObject);
 		res.status(201).send(quoteObject);
 	} else {
