@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 
 const { quotes } = require("./data");
-// console.log(quotes);
 const { getRandomElement } = require("./utils");
 
 const PORT = process.env.PORT || 4001;
@@ -17,11 +16,11 @@ app.get("/api/quotes/random", (req, res, next) => {
 	res.send(getRandomElement(quotes));
 });
 
-app.get("/api/quotes?person=enteredValue", (req, res, next) => {
+app.get("/api/quotes?person=author", (req, res, next) => {
 	const personRequested = req.query.person;
 	if (personRequested) {
 		quotes.filter((quote) => quote.person === personRequested);
-		res.send(quotes);
+		res.send(req.query);
 	} else {
 		res.send([]);
 	}
