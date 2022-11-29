@@ -9,23 +9,18 @@ const PORT = process.env.PORT || 4001;
 app.use(express.static("public"));
 
 app.get("/api/quotes", (req, res) => {
-	res.send(quotes);
+	const personRequested = req.query.person;
+	if (personRequested === "") {
+		res.send(quotes);
+	} else {
+		let filteredQuotes = [];
+		filteredQuotes = quotes.filter((quote) => quote.person === personRequested);
+		res.send(filteredQuotes);
+	}
 });
 
 app.get("/api/quotes/random", (req, res, next) => {
 	res.send(getRandomElement(quotes));
-});
-
-app.get("/api/quotes?person=author", (req, res, next) => {
-	const personRequested = req.query.person;
-	if (personRequested) {
-		const filteredQuotes = quotes.filter(
-			(quote) => quote.person === personRequested
-		);
-		res.send(filteredQuotes);
-	} else {
-		res.send(quotes);
-	}
 });
 
 app.post("/api/quotes", (req, res, next) => {
